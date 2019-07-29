@@ -1,6 +1,7 @@
 #include "Inventory.h"
 #include "Item.h"
 #include <iostream>
+
 /*
 I think we should make a new dynamic array for every item we create to make it easier to add and remove
 compared to having a large array and just stacking on that
