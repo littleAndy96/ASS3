@@ -1,4 +1,5 @@
 #include "Sale.h"
+
 int Sale::idCounter = 1;
 
 Sale::Sale(string date,Time* time)
@@ -116,7 +117,7 @@ double Sale::calculateRunningTotalWithTaxes()
     
 }
 //must set the id for the payments but not sure how to proceed
-double Sale::calculateRunningTotalWithMethod(string method)
+void Sale::calculateAmountChargedWithMethod(string method)
 {
     double taxedAmount = 0;
     for(int i = 0; i < maxSaleCapacity; ++i)
@@ -129,18 +130,34 @@ double Sale::calculateRunningTotalWithMethod(string method)
     if(method == "cash" || method == "CASH" || method == "Cash")
     {
         payment = new CashPayment(id,taxedAmount);
+		this->amountCharged = payment->calculateAmountCharged(taxedAmount);
+		cout << "Amount charged: " << amountCharged << '\n';
     }
     else if(method == "credit" || method == "CREDIT" || method == "Credit")
     {
         payment = new CreditCardPayment(id,taxedAmount);
+		this->amountCharged = payment->calculateAmountCharged(taxedAmount);
+		cout << "Amount charged: " << amountCharged << '\n';
     }
-    else 
-        payment = new DebitCardPayment(id,taxedAmount);
-    
+	else
+	{
+		payment = new DebitCardPayment(id, taxedAmount);
+		this->amountCharged = payment->calculateAmountCharged(taxedAmount);
+		cout << "Amount charged: " << amountCharged << '\n';
+	}
+
 }
 
 bool Sale::completeTransaction()
 {
+	string method;
+	cout << "Please input method of payment: " << '\n';
+	cin >> method;
+	calculateAmountChargedWithMethod(method);
+	
+	// check for quantities here
+	// for loop for every item in saleItems
+	// in for loop: itemCheck, removeiItem, etc.
 
-
+	return this->isComplete;
 }
