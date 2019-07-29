@@ -2,18 +2,14 @@
 #include "Inventory.h"
 #include "Payment.h"
 #include "ApprovalAuthority.h"
+#include "Sale.h"
+#include "Time.h"
 
 #include <iostream>
 
 using namespace std;
 
 int main() {
-	ApprovalAuthority a1;
-	a1.checkApproval(); 
-	
-	//UNFINISHED
-
-	cout << '\n';
 
 	Inventory* inventory = new Inventory();
 	Item* item1 = new Item(10011, 3.50, "Watermelon");
@@ -30,6 +26,16 @@ int main() {
 	inventory->itemCheck(item2);
 	inventory->removeItem(item2, 7);
 	inventory->removeItem(item3, 1);
+
+	Time* t1 = new Time();
+	t1->setTime(12, 55, 20);
+
+	Sale* s1 = new Sale("1 January 2019", t1);
+	s1->addItemToSale(item1, 1);
+	s1->addItemToSale(item2, 103);
+	s1->removeItemFromSale(item1, 2);
+	s1->removeItemFromSale(item2, 1);
+	s1->calculateAmountChargedWithMethod("cash");
 
 
 	delete item1;
