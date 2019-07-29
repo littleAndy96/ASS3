@@ -8,7 +8,7 @@ Payment::~Payment()
 {
 }
 
-double Payment::calculateAmountCharged()
+double Payment::calculateAmountCharged(double totalWithTaxes)
 {
 	return 0.0;
 }
