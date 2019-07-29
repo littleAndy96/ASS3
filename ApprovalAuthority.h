@@ -3,7 +3,8 @@
 class ApprovalAuthority
 {
 public:
+	ApprovalAuthority();
+	~ApprovalAuthority();
 	bool checkApproval();
 private:
 };
-
