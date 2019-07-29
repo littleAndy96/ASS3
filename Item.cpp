@@ -2,7 +2,7 @@
 
 using namespace std;
 
-double Item::taxRate = 0.15;
+double Item::taxRate = 0.19;
 
 Item::Item(int id) : id(id) {
 	itemPrice = 0;

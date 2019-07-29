@@ -1,7 +1,6 @@
 #include "Payment.h"
 
-Payment::Payment(int id)
-	: id(id), amountCharged(0)
+Payment::Payment(int id): id(id), amountCharged(0)
 {
 }
 

@@ -1,13 +1,12 @@
 #pragma once
 #include "Payment.h"
 
-class CashPayment :
-	public Payment
+class CashPayment : public Payment
 {
 public:
-	CashPayment(int id, double TotalWithTaxes);
+	CashPayment(int id, double totalWithTaxes);
 	~CashPayment();
-	double calculateAmountCharged(double TotalWithTaxes);
+	double calculateAmountCharged(double totalWithTaxes);
 	bool checkForApproval();
 private:
 
