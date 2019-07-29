@@ -11,5 +11,7 @@ public:
 	~CreditCardPayment() = default;
 	double calculateAmountCharged(double totalWithTaxes);
 	bool checkForApproval();
+private:
+	ApprovalAuthority approvalAuthority;
 };
 
