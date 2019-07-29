@@ -1,4 +1,7 @@
 #pragma once
+#include "ApprovalAuthority.h"
+#include <iostream>
+using namespace std;
 
 // the payment is only to be created when the Sale is being finalized.
 // this class will generally be asked to return two things to the Sale:

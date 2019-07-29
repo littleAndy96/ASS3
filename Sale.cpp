@@ -1,19 +1,23 @@
 #include "Sale.h"
+int Sale::idCounter = 1;
 
-Sale::Sale()
+Sale::Sale(string date,Time* time)
 {
-    sale = new Item* [maxSaleCapacity];
+    saleItems = new Item* [maxSaleCapacity];
 
     for(int i = 0; i < maxSaleCapacity; ++i)
     {
-        sale[i] = new Item(0);
+        saleItems[i] = new Item(0);
     }
-
+    this->date = date;
+    this->time = time;
+    id = idCounter;
+    ++idCounter;
 }
 
 Sale::~Sale()
 {
-    delete [] sale;
+    delete [] saleItems;
 }
 
 void Sale::addItemToSale(Item* item, int quantity)
@@ -21,38 +25,45 @@ void Sale::addItemToSale(Item* item, int quantity)
 	// first, look through the array to see if the item is there, in which case we just add to the quantity
 	for (int i = 0; i < maxSaleCapacity; ++i) {
 		// first check if inventory[i] is a nullptr because we don't want to call a method on a nullptr
-		if (sale[i] != nullptr)
+		if (saleItems[i]->getItemId() != 0)
 		{
 			// now it's safe to call the method and check if we have an id match
-			if (sale[i]->getItemId() == item->getItemId())
+			if (saleItems[i]->getItemId() == item->getItemId())
 			{
 				//if id matches, we just add to the quantity of that item
 				quantities[i] += quantity;
+                cout << "Amount before taxes: " << calculateRunningTotalBeforeTaxes() << endl;
+                cout << "Amount after taxes: " << calculateRunningTotalWithTaxes() << endl;
 				return; // we return here to avoid going to the second for loop
 			}
 		}
 		
 	}
 
-	// if item is not found, we'll look for a pointer that points to nullptr, and add the item there
+	// if item is not found, we'll look for a pointer that points to 0, and add the item there
 	for (int i = 0; i < maxSaleCapacity; ++i) {
-		if (sale[i] == nullptr)
+		if (saleItems[i]->getItemId() == 0)
 		{
-			sale[i] = item;
+			saleItems[i] = item;
 			quantities[i] = quantity;
+                cout << "Amount before taxes: " << calculateRunningTotalBeforeTaxes() << endl;
+                cout << "Amount after taxes: " << calculateRunningTotalWithTaxes() << endl;            
 			return;
 		}
 	}
+
+
+
 }
 
 void Sale::removeItemFromSale(Item* item, int quantity)
 {
 	for (int i = 0; i < maxSaleCapacity; ++i) {
 		// first check if inventory[i] is a nullptr because we don't want to call a method on a nullptr
-		if (sale[i] != nullptr)
+		if (saleItems[i] != nullptr)
 		{
 			// now it's safe to call the method and check if we have an id match
-			if (sale[i]->getItemId() == item->getItemId())
+			if (saleItems[i]->getItemId() == item->getItemId())
 			{
 				// if id matches, we then make sure there's enough quantity to remove
 				if (quantities[i] >= quantity)
@@ -60,7 +71,9 @@ void Sale::removeItemFromSale(Item* item, int quantity)
 					quantities[i] -= quantity;
 					// finally, if the quantity is now 0, then we remove the item from inventory
 					if (quantities[i] == 0)
-						sale[i] = nullptr;
+						saleItems[i] = nullptr;
+                cout << "Amount before taxes: " << calculateRunningTotalBeforeTaxes() << endl;
+                cout << "Amount after taxes: " << calculateRunningTotalWithTaxes() << endl;                        
 					return;
 				}
 				// when there is not enough quantity to remove:
@@ -77,54 +90,57 @@ void Sale::removeItemFromSale(Item* item, int quantity)
 	return;
 }
 // add all the items in the sale * the amount 
-double Sale::getRunningTotalBeforeTaxes(Sale* sale)
+double Sale::calculateRunningTotalBeforeTaxes()
 {
-    double amountCharged = 0;
+    double runningTotal = 0;
     for(int i = 0; i < maxSaleCapacity; ++i)
     {
-        amountCharged += (sale[i]->getItemPrice()*quantities);
+        runningTotal += (saleItems[i]->getItemPrice()*quantities[i]);
     }
-    return amountCharged;
+    runningTotalBeforeTaxes = runningTotal;
+    return runningTotal;
 }
 
-double Sale::getRunningTotalWithTaxes(Sale* sale)
+double Sale::calculateRunningTotalWithTaxes()
 {
-    double amountCharged = 0;
+    double taxedAmount = 0;
     for(int i = 0; i < maxSaleCapacity; ++i)
     {
-        amountCharged += (sale[i]->getItemPrice()*quantities);
+        taxedAmount += (saleItems[i]->getItemPrice()*quantities[i]);
 
     }
 // must add the taxe rate to the amount 
-    return amountCharged*Item::taxRate;
+    runningTotalWithTaxes = taxedAmount;
+
+    return taxedAmount*1.19;
     
 }
 //must set the id for the payments but not sure how to proceed
-double Sale::getRunningTotalWithMethod(Sale* sale,string method)
+double Sale::calculateRunningTotalWithMethod(string method)
 {
-    double amountCharged = 0;
+    double taxedAmount = 0;
     for(int i = 0; i < maxSaleCapacity; ++i)
     {
-        amountCharged += (sale[i]->getItemPrice()*quantities);
+        taxedAmount += (saleItems[i]->getItemPrice()*quantities[i]);
 
     }
-    amountCharged = amountCharged * 1.19;
+    taxedAmount = taxedAmount * 1.19;
 
     if(method == "cash" || method == "CASH" || method == "Cash")
     {
-        CashPayment(id,amountCharged);
+        payment = new CashPayment(id,taxedAmount);
     }
     else if(method == "credit" || method == "CREDIT" || method == "Credit")
     {
-        CreditCardPayment(id,amountCharged);
+        payment = new CreditCardPayment(id,taxedAmount);
     }
-    else {
-        DebitCardPayment(id,amountCharged)
-    }
+    else 
+        payment = new DebitCardPayment(id,taxedAmount);
+    
 }
 
-bool Sale::completeTransaction(Sale* sale)
+bool Sale::completeTransaction()
 {
-    
+
 
 }

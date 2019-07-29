@@ -17,6 +17,8 @@ public:
 	double getItemTaxed(); // gets the total of the item * taxes
 	double getTaxOfItem(); // gets the taxes applied on the item
 	string getItemName(); // returns the product name
+protected:
+	static double taxRate; // rate of the taxes
 private:
 	const int id; // item id: can't be changed
 	const string productName; // also known as the product description
