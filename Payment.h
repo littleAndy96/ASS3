@@ -11,7 +11,7 @@ class Payment
 public:
 	Payment(int id);
 	~Payment();
-	virtual double calculateAmountCharged();
+	virtual double calculateAmountCharged(double totalWithTaxes);
 	virtual bool checkForApproval();
 	double getAmountCharged() const;
 	bool getIsApproved() const;
