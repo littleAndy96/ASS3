@@ -12,16 +12,17 @@ CreditCardPayment::CreditCardPayment(int id, double totalWithTaxes) : Payment(id
 double CreditCardPayment::calculateAmountCharged(double totalWithTaxes)
 {
 	// assignment says that it has to be greater than $50 so is it include ?? AT
-	if(totalWithTaxes < 50){
-		cout << "This " << getAmountCharged() << "is too low for a credit card payment" << endl;
-		return false;
-	}
-	else return totalWithTaxes * 1.02;
+	return totalWithTaxes * 1.02;
 	
 
 }
 
 bool CreditCardPayment::checkForApproval()
 {
-	ApprovalAuthority::checkApproval;
+	if(amountCharged < 50){
+		cout << "This " << getAmountCharged() << "is too low for a credit card payment" << endl;
+		return false;
+	}
+	else 
+	return ApprovalAuthority::checkApproval;
 }
